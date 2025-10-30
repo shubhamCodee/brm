@@ -1,0 +1,6 @@
+faker seeder
+model(org, contact)
+Relationships
+
+netstat -ano | findstr :5173
+taskkill /F /PID 19104
