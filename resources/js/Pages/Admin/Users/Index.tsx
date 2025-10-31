@@ -1,6 +1,5 @@
 import { PageProps, User } from '@/types';
-import { Link, usePage } from '@inertiajs/react';
-import { motion } from 'framer-motion';
+import { Head, Link, usePage } from '@inertiajs/react';
 import { ReactNode } from 'react';
 import DataTable, { TableColumn } from 'react-data-table-component';
 import AdminLayout from '../../../Layouts/AdminLayout.js';
@@ -146,25 +145,25 @@ export default function Index() {
     const { users } = usePage<PageProps>().props;
 
     return (
-        <div className="min-h-screen bg-[#041C32] px-8 py-12 font-sans text-[#ECB365]">
-            <motion.div initial={{ opacity: 0, y: -15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="mx-auto max-w-7xl">
-                {/* Header */}
-                <div className="mb-10 flex flex-col items-center justify-between sm:flex-row">
-                    <h1 className="text-4xl font-extrabold tracking-wide">👥 All Users</h1>
-                    <Link
-                        href={'/admin/users/create'}
-                        className="mt-4 rounded-xl bg-[#ECB365] px-6 py-3 font-semibold text-[#041C32] shadow-md transition-all hover:bg-[#d6a84e] sm:mt-0"
-                    >
-                        + Add New User
-                    </Link>
-                </div>
+        <>
+            <Head title="Users" />
 
-                {/* Table */}
-                <div className="rounded-md border border-[#064663]/50 bg-[#04293A] shadow-xl backdrop-blur-sm">
-                    <DataTable columns={columns} data={users} pagination highlightOnHover customStyles={customStyles} />
-                </div>
-            </motion.div>
-        </div>
+            {/* Header */}
+            <div className="mb-10 flex flex-col items-center justify-between sm:flex-row">
+                <h1 className="text-4xl font-extrabold tracking-wide">👥 All Users</h1>
+                <Link
+                    href={'/admin/users/create'}
+                    className="mt-4 rounded-xl bg-[#ECB365] px-6 py-3 font-semibold text-[#041C32] shadow-md transition-all hover:bg-[#d6a84e] sm:mt-0"
+                >
+                    + Add New User
+                </Link>
+            </div>
+
+            {/* Table */}
+            <div className="rounded-md border border-[#064663]/50 bg-[#04293A] shadow-xl backdrop-blur-sm">
+                <DataTable columns={columns} data={users} pagination highlightOnHover customStyles={customStyles} />
+            </div>
+        </>
     );
 }
 

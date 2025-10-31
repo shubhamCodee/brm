@@ -27,18 +27,23 @@ export default function AdminNavbar() {
                     {/* Navigation Links */}
                     <div className="hidden items-center gap-x-6 text-sm font-semibold md:flex">
                         <Link
-                            href={route('admin.dashboard')}
-                            className={`transition-colors duration-300 ${isActive('admin.dashboard') ? 'text-[#ECB365]' : 'text-gray-400 hover:text-white'}`}
-                        >
-                            Dashboard
-                        </Link>
-                        <Link
                             href={route('admin.users.index')}
                             className={`transition-colors duration-300 ${isActive('admin.users.index') ? 'text-[#ECB365]' : 'text-gray-400 hover:text-white'}`}
                         >
                             Users
                         </Link>
-                        {/* Add other admin links here in the future, e.g., Products, Settings, etc. */}
+                        <Link
+                            href={route('admin.organizations.index')}
+                            className={`transition-colors duration-300 ${isActive('admin.organizations.index') ? 'text-[#ECB365]' : 'text-gray-400 hover:text-white'}`}
+                        >
+                            Organizations
+                        </Link>
+                        <Link
+                            href={route('admin.contacts.index')}
+                            className={`transition-colors duration-300 ${isActive('admin.contacts.index') ? 'text-[#ECB365]' : 'text-gray-400 hover:text-white'}`}
+                        >
+                            Contacts
+                        </Link>
                     </div>
                 </div>
 

@@ -1,6 +1,7 @@
-faker seeder
-model(org, contact)
-Relationships
+repository interface
+trait vs service
+queue and job (notification, mass update)
+
 
 netstat -ano | findstr :5173
-taskkill /F /PID 19104
+taskkill /F /PID 9392
