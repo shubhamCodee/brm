@@ -2,23 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BulkDestroyOrganizationRequest;
+use App\Http\Requests\BulkUpdateOrganizationRequest;
 use App\Http\Requests\StoreOrganizationRequest;
 use App\Http\Requests\UpdateOrganizationRequest;
+use App\Interfaces\OrganizationRepositoryInterface;
 use App\Models\Organization;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class OrganizationController extends Controller
 {
+    public function __construct(private OrganizationRepositoryInterface $organizationRepository) {}
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $organizations = Organization::latest()->get();
-
         return Inertia::render('Admin/Organizations/Index', [
-            'organizations' => $organizations,
+            'organizations' => $this->organizationRepository->getAll(),
         ]);
     }
 
@@ -35,9 +39,7 @@ class OrganizationController extends Controller
      */
     public function store(StoreOrganizationRequest $request)
     {
-        $validatedData = $request->validated();
-
-        Organization::create($validatedData);
+        $this->organizationRepository->create($request->validated());
 
         return redirect()->route('admin.organizations.index')->with('success', 'Organization created successfully.');
     }
@@ -67,9 +69,7 @@ class OrganizationController extends Controller
      */
     public function update(UpdateOrganizationRequest $request, Organization $organization)
     {
-        $validatedData = $request->validated();
-
-        $organization->update($validatedData);
+        $this->organizationRepository->update($organization, $request->validated());
 
         return redirect()->route('admin.organizations.index')->with('success', 'Organization updated successfully.');
     }
@@ -79,8 +79,22 @@ class OrganizationController extends Controller
      */
     public function destroy(Organization $organization)
     {
-        $organization->delete();
+        $this->organizationRepository->delete($organization);
 
         return redirect()->route('admin.organizations.index')->with('success', 'Organization deleted successfully.');
+    }
+
+    public function massUpdate(BulkUpdateOrganizationRequest $request)
+    {
+        $validated = $request->validated();
+        $affected = $this->organizationRepository->massUpdate($validated["ids"], $validated["status"]);
+        return redirect()->back()->with("success", $affected . "organization(s) updated successfully");
+    }
+
+    public function massDestroy(BulkDestroyOrganizationRequest $request)
+    {
+        $validated = $request->validated();
+        $affected = $this->organizationRepository->massDestroy($validated["ids"]);
+        return redirect()->back()->with("success", $affected . "organization(s) deleted successfully");
     }
 }

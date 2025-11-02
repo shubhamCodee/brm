@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\MassDestroyContactRequest;
 use App\Http\Requests\StoreContactRequest;
 use App\Http\Requests\UpdateContactRequest;
+use App\Interfaces\ContactRepositoryInterface;
 use App\Models\Contact;
 use App\Models\Organization;
 use Illuminate\Http\Request;
@@ -11,62 +13,70 @@ use Inertia\Inertia;
 
 class ContactController extends Controller
 {
+    public function __construct(private ContactRepositoryInterface $contactRepository) {}
+
     public function index()
     {
-        $contacts = Contact::with('organization')->latest()->get();
-
         return Inertia::render('Admin/Contacts/Index', [
-            'contacts' => $contacts,
+            'contacts' => $this->contactRepository->getAllWithOrganization(),
         ]);
     }
 
     public function create()
     {
-        $organizations = Organization::orderBy('name')
-            ->get(['id', 'name']);
-
         return Inertia::render('Admin/Contacts/Create', [
-            'organizations' => $organizations,
+            'organizations' => $this->contactRepository->getOrganizationsForSelect(),
         ]);
     }
 
     public function store(StoreContactRequest $request)
     {
-        Contact::create($request->validated());
+        $this->contactRepository->create($request->validated());
 
         return redirect()->route('admin.contacts.index')->with('success', 'Contact created successfully.');
     }
 
-    public function show(Contact $contact)
+    public function show(int $id)
     {
-        $contact->load('organization');
+        $contact = $this->contactRepository->findWithOrganization($id);
+
+        if (!$contact) {
+            abort(404);
+        }
 
         return Inertia::render('Admin/Contacts/Show', [
-            'contact' => $contact,
+            'contact' => $this->contactRepository->findWithOrganization($id),
         ]);
     }
 
     public function edit(Contact $contact)
     {
-        $organizations = Organization::orderBy('name')->get(['id', 'name']);
-
         return Inertia::render('Admin/Contacts/Edit', [
             'contact' => $contact,
-            'organizations' => $organizations,
+            'organizations' => $this->contactRepository->getOrganizationsForSelect(),
         ]);
     }
 
     public function update(UpdateContactRequest $request, Contact $contact)
     {
-        $contact->update($request->validated());
+        $this->contactRepository->update($contact, $request->validated());
 
         return redirect()->route('admin.contacts.index')->with('success', 'Contact updated successfully.');
     }
 
     public function destroy(Contact $contact)
     {
-        $contact->delete();
+        $this->contactRepository->delete($contact);
 
         return redirect()->route('admin.contacts.index')->with('success', 'Contact deleted successfully.');
+    }
+
+    public function massDestroy(MassDestroyContactRequest $request)
+    {
+        $ids = $request->validated()['ids'];
+
+        $this->contactRepository->massDestroy($ids);
+
+        return redirect()->route('admin.contacts.index')->with('success', 'Contacts deleted successfully.');
     }
 }
