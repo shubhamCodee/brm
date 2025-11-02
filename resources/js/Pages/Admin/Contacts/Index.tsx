@@ -1,10 +1,11 @@
 import AdminLayout from '@/Layouts/AdminLayout';
 import { PageProps } from '@/types';
-import { Head, Link, usePage } from '@inertiajs/react';
-import React from 'react';
+import { Head, Link, useForm, usePage } from '@inertiajs/react';
+import React, { useCallback, useState } from 'react';
 import DataTable, { TableColumn } from 'react-data-table-component';
 import { route } from 'ziggy-js';
 
+// Define the shape of our data for TypeScript
 interface Organization {
     id: number;
     name: string;
@@ -22,14 +23,63 @@ interface Contact {
 export default function Index() {
     const { contacts } = usePage<PageProps & { contacts: Contact[] }>().props;
 
+    // --- STATE MANAGEMENT ---
+    const [selectedRows, setSelectedRows] = useState<Contact[]>([]);
+    const [toggleCleared, setToggleCleared] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalAction, setModalAction] = useState<'bulkDelete' | null>(null);
+
+    // --- FORM HOOKS ---
+    const {
+        data: massDeleteData,
+        setData: setMassDeleteData,
+        delete: massDelete,
+        processing: massDeleteProcessing,
+        errors: massDeleteErrors,
+    } = useForm({
+        ids: [] as number[],
+    });
+
+    // --- HANDLERS ---
+    const handleRowSelected = useCallback((state: { selectedRows: Contact[] }) => {
+        setSelectedRows(state.selectedRows);
+        // Keep the form state in sync, just like in the Users page
+        setMassDeleteData(
+            'ids',
+            state.selectedRows.map((curr) => curr.id),
+        );
+    }, []);
+
+    const openModal = (action: 'bulkDelete') => {
+        setModalAction(action);
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setModalAction(null);
+    };
+
+    const handleMassDelete = () => {
+        massDelete(route('admin.contacts.mass-destroy'), {
+            onSuccess: () => {
+                closeModal();
+                setToggleCleared(!toggleCleared);
+                setSelectedRows([]);
+            },
+            preserveScroll: true,
+        });
+    };
+
+    const isMultipleRowsSelected = selectedRows.length >= 1;
+
+    // --- DATA TABLE CONFIGURATION ---
     const columns: TableColumn<Contact>[] = [
         {
             name: 'Name',
             selector: (row) => `${row.first_name} ${row.last_name}`,
             sortable: true,
-            cell: (
-                row: Contact, // Use cell to render a link
-            ) => (
+            cell: (row) => (
                 <Link href={route('admin.contacts.show', row.id)} className="font-semibold text-white hover:text-[#ECB365] hover:underline">
                     {`${row.first_name} ${row.last_name}`}
                 </Link>
@@ -37,34 +87,34 @@ export default function Index() {
         },
         {
             name: 'Organization',
-            selector: (row) => row.organization.name,
+            selector: (row) => (row.organization ? row.organization.name : 'N/A'),
             sortable: true,
-            cell: (row) => (
-                <Link href={route('admin.organizations.show', row.organization.id)} className="text-gray-400 hover:text-[#ECB365] hover:underline">
-                    {row.organization.name}
-                </Link>
-            ),
+            cell: (row) =>
+                row.organization ? (
+                    <Link
+                        href={route('admin.organizations.show', row.organization.id)}
+                        className="text-gray-400 hover:text-[#ECB365] hover:underline"
+                    >
+                        {row.organization.name}
+                    </Link>
+                ) : (
+                    <span className="text-gray-500 italic">No Organization</span>
+                ),
         },
-        {
-            name: 'Email',
-            selector: (row) => row.email,
-        },
-        {
-            name: 'Phone',
-            selector: (row) => row.phone,
-        },
+        { name: 'Email', selector: (row) => row.email },
+        { name: 'Phone', selector: (row) => row.phone },
         {
             name: 'Actions',
-            cell: (row: Contact) => (
-                <div className="flex space-x-2">
-                    <Link href={route('admin.contacts.edit', row.id)} className="font-semibold text-blue-400 hover:text-blue-600">
+            cell: (row) => (
+                <div className="flex space-x-3">
+                    <Link href={route('admin.contacts.edit', row.id)} className="font-semibold text-blue-400 hover:text-blue-500">
                         Edit
                     </Link>
                     <Link
                         href={route('admin.contacts.destroy', row.id)}
                         method="delete"
                         as="button"
-                        className="font-semibold text-red-400 hover:text-red-600"
+                        className="font-semibold text-red-400 hover:text-red-500"
                     >
                         Delete
                     </Link>
@@ -159,15 +209,16 @@ export default function Index() {
     return (
         <>
             <Head title="Contacts" />
+
             <div className="p-4 sm:p-6 lg:p-8">
-                <div className="mb-8 flex items-center justify-between">
+                <div className="mb-6 flex flex-col items-center justify-between gap-4 sm:flex-row">
                     <div>
                         <h1 className="text-3xl font-bold text-white">Contacts</h1>
-                        <p className="mt-2 text-gray-400">A list of all the contacts in your database.</p>
+                        <p className="mt-1 text-gray-400">Browse and manage all contact records.</p>
                     </div>
                     <Link
                         href={route('admin.contacts.create')}
-                        className="hover:bg-opacity-90 inline-flex items-center gap-x-2 rounded-md bg-[#ECB365] px-5 py-2.5 text-sm font-bold text-[#041C32] shadow-lg shadow-[#ECB365]/20 transition-all duration-300 hover:shadow-xl hover:shadow-[#ECB365]/30"
+                        className="hover:bg-opacity-90 inline-flex items-center gap-x-2 rounded-md bg-[#ECB365] px-5 py-2.5 text-sm font-bold text-[#041C32] shadow-lg transition-all"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                             <path
@@ -180,10 +231,65 @@ export default function Index() {
                     </Link>
                 </div>
 
-                <div className="overflow-hidden rounded-lg border border-[#064663] bg-[#04293A]">
-                    <DataTable columns={columns} data={contacts} pagination highlightOnHover customStyles={customStyles} />
+                <div className="mb-4 flex h-16 items-center justify-between rounded-lg border border-[#064663]/50 bg-[#04293A] px-4">
+                    <span className="text-sm font-semibold text-white">
+                        {selectedRows.length > 0 ? `${selectedRows.length} item(s) selected` : 'Select multiple rows to perform an action'}
+                    </span>
+                    <div className="flex items-center space-x-3">
+                        {isMultipleRowsSelected && (
+                            <button
+                                onClick={() => openModal('bulkDelete')}
+                                className="rounded-md bg-red-600 px-4 py-2 text-sm font-bold text-white hover:bg-red-700"
+                            >
+                                Bulk Delete
+                            </button>
+                        )}
+                    </div>
+                </div>
+
+                <div className="rounded-lg border border-[#064663]/50 bg-[#04293A] shadow-xl">
+                    <DataTable
+                        selectableRows
+                        clearSelectedRows={toggleCleared}
+                        onSelectedRowsChange={handleRowSelected}
+                        columns={columns}
+                        data={contacts}
+                        pagination
+                        highlightOnHover
+                        customStyles={customStyles}
+                    />
                 </div>
             </div>
+
+            {isModalOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center">
+                    <div className="absolute inset-0 bg-[#041C32]/80 backdrop-blur-sm" onClick={closeModal}></div>
+
+                    <div className="relative w-full max-w-md transform rounded-2xl border border-[#064663] bg-[#04293A] p-6 shadow-xl">
+                        {modalAction === 'bulkDelete' && (
+                            <>
+                                <h3 className="text-lg font-bold text-red-500">Confirm Bulk Deletion</h3>
+                                <p className="mt-2 text-gray-400">
+                                    You are about to delete {selectedRows.length} contacts. This action cannot be undone.
+                                </p>
+                                {massDeleteErrors.ids && <p className="mt-2 text-sm text-red-500">{massDeleteErrors.ids}</p>}
+                                <div className="mt-6 flex justify-end space-x-4">
+                                    <button onClick={closeModal} className="text-gray-400 hover:text-white">
+                                        Cancel
+                                    </button>
+                                    <button
+                                        disabled={massDeleteProcessing}
+                                        onClick={handleMassDelete}
+                                        className="hover:bg-opacity-90 rounded-md bg-red-600 px-5 py-2 text-base font-bold text-white shadow-lg disabled:opacity-50"
+                                    >
+                                        {massDeleteProcessing ? 'Deleting...' : 'Delete All'}
+                                    </button>
+                                </div>
+                            </>
+                        )}
+                    </div>
+                </div>
+            )}
         </>
     );
 }
