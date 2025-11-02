@@ -39,21 +39,6 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    protected static function booted()
-    {
-        static::created(function (User $user) {
-            Log::info("User Created: {$user->name} (ID: {$user->id})");
-        });
-
-        static::updated(function (User $user) {
-            Log::info("User Updated: {$user->name} (ID: {$user->id})");
-        });
-
-        static::deleted(function (User $user) {
-            Log::info("User Deleted: {$user->name} (ID: {$user->id})");
-        });
-    }
-
     /**
      * Get the attributes that should be cast.
      *

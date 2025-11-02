@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\MassDestroyUserRequest;
+use App\Http\Requests\MassUpdateUserRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Interfaces\UserRepositoryInterface;
+use App\Jobs\NotifyUserOfProfileUpdate;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -11,11 +15,12 @@ use Inertia\Inertia;
 
 class UserController extends Controller
 {
+    public function __construct(private UserRepositoryInterface $userRepository) {}
+
     public function index()
     {
-        $users = User::all();
         return Inertia::render('Admin/Users/Index', [
-            'users' => $users,
+            'users' => $this->userRepository->getAll(),
         ]);
     }
 
@@ -33,9 +38,9 @@ class UserController extends Controller
             $validatedData["profile_picture"] = $path;
         }
 
-        User::create($validatedData);
+        $this->userRepository->create($validatedData);
 
-        return redirect()->route("admin.users.index");
+        return redirect()->route('admin.users.index')->with('success', 'User created successfully.');
     }
 
     public function edit(User $user)
@@ -47,7 +52,7 @@ class UserController extends Controller
 
     public function update(UpdateUserRequest $request, User $user)
     {
-        $validatedData = $request->validated();
+        $validatedData = $request->safe()->except("profile_picture");
 
         if (empty($validatedData["password"])) {
             unset($validatedData["password"]);
@@ -62,15 +67,47 @@ class UserController extends Controller
             $validatedData["profile_picture"] = $path;
         }
 
-        $user->update($validatedData);
+        $user->fill($validatedData);
+        $changes = $user->getDirty();
+
+        $this->userRepository->update($user, $validatedData);
+
+        if (!empty($changes)) {
+            NotifyUserOfProfileUpdate::dispatch($user, $changes);
+        }
 
         return redirect()->route("admin.users.index")->with('success', 'User updated successfully');
     }
 
     public function destroy(User $user)
     {
-        $user->delete();
+        if ($user->profile_picture) {
+            Storage::disk("public")->delete($user->profile_picture);
+        }
+
+        $this->userRepository->delete($user);
 
         return redirect('/admin/users')->with('success', 'User deleted successfully');
+    }
+
+    public function massUpdate(MassUpdateUserRequest $request)
+    {
+        $validated = $request->validated();
+
+        $ids = $validated['ids'];
+        $role = ['role' => $validated['role']];
+
+        $this->userRepository->massUpdate($ids, $role);
+
+        return redirect()->route('admin.users.index')->with('success', 'User roles updated successfully.');
+    }
+
+    public function massDestroy(MassDestroyUserRequest $request)
+    {
+        $ids = $request->validated()['ids'];
+
+        $this->userRepository->massDestroy($ids);
+
+        return redirect()->route('admin.users.index')->with('success', 'Users deleted successfully.');
     }
 }
