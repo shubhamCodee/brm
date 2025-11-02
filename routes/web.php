@@ -37,11 +37,17 @@ Route::middleware(["auth"])->group(function () {
 
 // admin routes
 Route::middleware(["auth", "admin"])->prefix("admin")->name("admin.")->group(function () {
+
     Route::get("/dashboard", [AdminDashboardController::class, "index"])->name("dashboard");
 
+    Route::patch("users/mass-update", [UserController::class, "massUpdate"])->name("users.mass-update");
+    Route::delete("users/mass-destroy", [UserController::class, "massDestroy"])->name("users.mass-destroy");
     Route::resource("users", UserController::class);
 
+    Route::patch("organizations/mass-update", [OrganizationController::class, "massUpdate"])->name("organizations.mass-update");
+    Route::delete("organizations/mass-destroy", [OrganizationController::class, "massDestroy"])->name("organizations.mass-destroy");
     Route::resource("organizations", OrganizationController::class);
 
+    Route::delete("contacts/mass-destroy", [ContactController::class, "massDestroy"])->name("contacts.mass-destroy");
     Route::resource("contacts", ContactController::class);
 });
