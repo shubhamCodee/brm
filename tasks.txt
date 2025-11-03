@@ -1,7 +1,15 @@
-repository interface
-trait vs service
-queue and job (notification, mass update)
-
-
 netstat -ano | findstr :5173
 taskkill /F /PID 9392
+
+centralised code 
+make one function helper function for massupdate and delete
+failed jobs
+
+redis and alternatives
+queue work v/s listen.
+Debugbar
+create/edit form optimization
+
+creating saving updating updated saved
+mode update
+updating saving updated saved

@@ -26,7 +26,7 @@ class OrganizationFactory extends Factory
             'country' => fake()->randomElement(['USA', 'Canada', 'UK', 'Australia']),
             'postal_code' => fake()->postcode(),
             'status' => fake()->randomElement(['lead', 'active', 'former']),
-            'industry' => json_encode(fake()->randomElements(['SaaS', 'E-commerce', 'Healthcare', 'FinTech', 'Education'], fake()->numberBetween(1, 3))),
+            'industry' => fake()->randomElements(['SaaS', 'E-commerce', 'Healthcare', 'FinTech', 'Education'], fake()->numberBetween(1, 3)),
             'notes' => fake()->optional()->paragraph(),
         ];
     }
