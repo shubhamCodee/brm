@@ -12,3 +12,12 @@ export type PageProps = {
         user: User | null;
     };
 };
+
+// import Echo from 'laravel-echo';
+
+// declare global {
+//     interface Window {
+//         Pusher: any;
+//         Echo: Echo;
+//     }
+// }

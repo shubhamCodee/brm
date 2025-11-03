@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserProfileUpdated;
 use App\Http\Requests\MassDestroyUserRequest;
 use App\Http\Requests\MassUpdateUserRequest;
 use App\Http\Requests\StoreUserRequest;
@@ -73,7 +74,11 @@ class UserController extends Controller
         $this->userRepository->update($user, $validatedData);
 
         if (!empty($changes)) {
-            NotifyUserOfProfileUpdate::dispatch($user, $changes);
+            $changedFields = implode(", ", array_keys($changes));
+            $message = "Your profile has been updated by an admin. Fields changed {$changedFields}";
+
+            // event(new UserProfileUpdated($user, $message));
+            UserProfileUpdated::dispatch($user, $message);
         }
 
         return redirect()->route("admin.users.index")->with('success', 'User updated successfully');
