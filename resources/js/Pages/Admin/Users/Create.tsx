@@ -1,9 +1,17 @@
+import PrimaryButton from '@/Components/Admin/PrimaryButton';
+import SelectInput, { SelectOption } from '@/Components/Admin/SelectInput';
+import TextInput from '@/Components/Admin/TextInput';
+import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
 import React, { ChangeEvent, ReactNode, useEffect, useState } from 'react';
 import { route } from 'ziggy-js';
-import AdminLayout from '../../../Layouts/AdminLayout.js';
 
 export default function Create() {
+    const roleOptions: SelectOption[] = [
+        { value: 'user', label: 'User' },
+        { value: 'admin', label: 'Admin' },
+    ];
+
     const { data, setData, post, processing, errors } = useForm({
         name: '',
         email: '',
@@ -85,67 +93,48 @@ export default function Create() {
                             </div>
 
                             <div className="space-y-4">
-                                <div>
-                                    <label className="mb-1 block text-sm font-medium text-gray-300">Name</label>
-                                    <input
-                                        type="text"
-                                        value={data.name}
-                                        onChange={(e) => setData('name', e.target.value)}
-                                        className="w-full rounded-md border-2 border-transparent bg-[#041C32] px-4 py-2.5 text-white placeholder-gray-500 transition focus:border-[#ECB365] focus:bg-[#064663] focus:ring-0 focus:outline-none"
-                                        placeholder="e.g., Shubham Mohapatra"
-                                    />
-                                    {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name}</p>}
-                                </div>
+                                <TextInput
+                                    label="Name"
+                                    name="name"
+                                    value={data.name}
+                                    onChange={(e) => setData('name', e.target.value)}
+                                    error={errors.name}
+                                    placeholder="e.g., Shubham Mohapatra"
+                                />
 
-                                <div>
-                                    <label className="mb-1 block text-sm font-medium text-gray-300">Email</label>
-                                    <input
-                                        type="email"
-                                        value={data.email}
-                                        onChange={(e) => setData('email', e.target.value)}
-                                        className="w-full rounded-md border-2 border-transparent bg-[#041C32] px-4 py-2.5 text-white placeholder-gray-500 transition focus:border-[#ECB365] focus:bg-[#064663] focus:ring-0 focus:outline-none"
-                                        placeholder="e.g., shubham@example.com"
-                                    />
-                                    {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
-                                </div>
+                                <TextInput
+                                    label="Email"
+                                    name="email"
+                                    type="email"
+                                    value={data.email}
+                                    onChange={(e) => setData('email', e.target.value)}
+                                    error={errors.email}
+                                    placeholder="e.g., shubham@example.com"
+                                />
 
-                                <div>
-                                    <label className="mb-1 block text-sm font-medium text-gray-300">Password</label>
-                                    <input
-                                        type="password"
-                                        value={data.password}
-                                        onChange={(e) => setData('password', e.target.value)}
-                                        className="w-full rounded-md border-2 border-transparent bg-[#041C32] px-4 py-2.5 text-white placeholder-gray-500 transition focus:border-[#ECB365] focus:bg-[#064663] focus:ring-0 focus:outline-none"
-                                        placeholder="••••••••"
-                                    />
-                                    {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password}</p>}
-                                </div>
+                                <TextInput
+                                    label="Password"
+                                    name="password"
+                                    type="password"
+                                    value={data.password}
+                                    onChange={(e) => setData('password', e.target.value)}
+                                    error={errors.password}
+                                    placeholder="••••••••"
+                                />
 
-                                <div>
-                                    <label className="mb-1 block text-sm font-medium text-gray-300">Role</label>
-                                    <select
-                                        value={data.role}
-                                        onChange={(e) => setData('role', e.target.value)}
-                                        className="w-full rounded-md border-2 border-transparent bg-[#041C32] px-4 py-2.5 text-white transition focus:border-[#ECB365] focus:bg-[#064663] focus:ring-0 focus:outline-none"
-                                    >
-                                        <option value="user" className="bg-[#04293A]">
-                                            User
-                                        </option>
-                                        <option value="admin" className="bg-[#04293A]">
-                                            Admin
-                                        </option>
-                                    </select>
-                                </div>
+                                <SelectInput
+                                    label="Role"
+                                    name="role"
+                                    options={roleOptions}
+                                    value={roleOptions.find((option) => option.value === data.role)}
+                                    onChange={(option) => setData('role', (option as SelectOption)?.value as string)}
+                                />
                             </div>
 
-                            <div className="pt-4">
-                                <button
-                                    type="submit"
-                                    disabled={processing}
-                                    className="hover:bg-opacity-90 w-full rounded-md bg-[#ECB365] py-3 text-base font-bold text-[#041C32] shadow-lg shadow-[#ECB365]/20 transition-all duration-300 hover:shadow-xl hover:shadow-[#ECB365]/30 disabled:opacity-50"
-                                >
+                            <div className="pt-4 flex justify-center">
+                                <PrimaryButton type="submit" disabled={processing} >
                                     {processing ? 'Creating...' : 'Create User'}
-                                </button>
+                                </PrimaryButton>
                             </div>
                         </form>
                     </div>

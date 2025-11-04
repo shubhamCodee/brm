@@ -1,8 +1,10 @@
+import PrimaryButton from '@/Components/Admin/PrimaryButton';
+import SelectInput, { SelectOption } from '@/Components/Admin/SelectInput';
+import TextInput from '@/Components/Admin/TextInput';
 import AdminLayout from '@/Layouts/AdminLayout';
 import { PageProps } from '@/types';
 import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import React from 'react';
-import Select from 'react-select';
 import { route } from 'ziggy-js';
 
 interface Organization {
@@ -42,31 +44,10 @@ export default function Edit() {
         put(route('admin.contacts.update', contact.id));
     }
 
-    const organizationOptions: OrganizationOption[] = organizations.map((org) => ({
+    const organizationOptions: SelectOption[] = organizations.map((org) => ({
         value: org.id,
         label: org.name,
     }));
-
-    const defaultOrganization = organizationOptions.find((option) => option.value === contact.organization_id);
-
-    const selectStyles = {
-        control: (base: any) => ({
-            ...base,
-            backgroundColor: '#041C32',
-            borderColor: '#064663',
-            '&:hover': { borderColor: '#ECB365' },
-            boxShadow: 'none',
-        }),
-        menu: (base: any) => ({ ...base, backgroundColor: '#04293A' }),
-        option: (base: any, { isFocused, isSelected }: any) => ({
-            ...base,
-            backgroundColor: isSelected ? '#ECB365' : isFocused ? '#064663' : 'transparent',
-            color: isSelected ? '#041C32' : '#FFFFFF',
-            '&:active': { backgroundColor: '#ECB365' },
-        }),
-        singleValue: (base: any) => ({ ...base, color: '#FFFFFF' }),
-        input: (base: any) => ({ ...base, color: '#FFFFFF' }),
-    };
 
     return (
         <>
@@ -82,93 +63,79 @@ export default function Edit() {
 
                     <form onSubmit={handleSubmit} className="space-y-8 rounded-lg border border-[#064663]/50 bg-[#04293A] p-8 shadow-2xl">
                         <div>
-                            <label className="mb-2 block text-sm font-semibold text-[#ECB365]">
-                                Organization <span className="text-red-500">*</span>
-                            </label>
-                            <Select
+                            <SelectInput
+                                label="Organization"
+                                name="organization_id"
                                 options={organizationOptions}
-                                styles={selectStyles}
-                                defaultValue={defaultOrganization}
-                                onChange={(option) => setData('organization_id', option?.value.toString() || '')}
+                                defaultValue={organizationOptions.find((option) => option.value === contact.organization_id)}
+                                onChange={(option) => setData('organization_id', (option as SelectOption)?.value.toString() || '')}
+                                error={errors.organization_id}
                                 placeholder="Search for an organization..."
                                 isClearable
                                 isSearchable
                             />
-                            {errors.organization_id && <p className="mt-1 text-sm text-red-500">{errors.organization_id}</p>}
                         </div>
 
                         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                             <div>
-                                <label className="mb-2 block text-sm font-semibold text-[#ECB365]">
-                                    First Name <span className="text-red-500">*</span>
-                                </label>
-                                <input
-                                    type="text"
+                                <TextInput
+                                    label="First Name"
+                                    name="first_name"
                                     value={data.first_name}
                                     onChange={(e) => setData('first_name', e.target.value)}
-                                    className="w-full rounded-md border-2 border-transparent bg-[#041C32] px-4 py-2.5 text-white placeholder-gray-500 transition focus:border-[#ECB365] focus:ring-0 focus:outline-none"
+                                    error={errors.first_name}
                                 />
-                                {errors.first_name && <p className="mt-1 text-sm text-red-500">{errors.first_name}</p>}
                             </div>
                             <div>
-                                <label className="mb-2 block text-sm font-semibold text-[#ECB365]">
-                                    Last Name <span className="text-red-500">*</span>
-                                </label>
-                                <input
-                                    type="text"
+                                <TextInput
+                                    label="Last Name"
+                                    name="last_name"
                                     value={data.last_name}
                                     onChange={(e) => setData('last_name', e.target.value)}
-                                    className="w-full rounded-md border-2 border-transparent bg-[#041C32] px-4 py-2.5 text-white placeholder-gray-500 transition focus:border-[#ECB365] focus:ring-0 focus:outline-none"
+                                    error={errors.last_name}
                                 />
-                                {errors.last_name && <p className="mt-1 text-sm text-red-500">{errors.last_name}</p>}
                             </div>
                         </div>
 
                         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                             <div>
-                                <label className="mb-2 block text-sm font-semibold text-[#ECB365]">Email</label>
-                                <input
+                                <TextInput
+                                    label="Email"
+                                    name="email"
                                     type="email"
                                     value={data.email}
                                     onChange={(e) => setData('email', e.target.value)}
-                                    className="w-full rounded-md border-2 border-transparent bg-[#041C32] px-4 py-2.5 text-white placeholder-gray-500 transition focus:border-[#ECB365] focus:ring-0 focus:outline-none"
+                                    error={errors.email}
                                 />
-                                {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
                             </div>
                             <div>
-                                <label className="mb-2 block text-sm font-semibold text-[#ECB365]">Phone</label>
-                                <input
-                                    type="text"
+                                <TextInput
+                                    label="Phone"
+                                    name="phone"
                                     value={data.phone}
                                     onChange={(e) => setData('phone', e.target.value)}
-                                    className="w-full rounded-md border-2 border-transparent bg-[#041C32] px-4 py-2.5 text-white placeholder-gray-500 transition focus:border-[#ECB365] focus:ring-0 focus:outline-none"
+                                    error={errors.phone}
                                 />
-                                {errors.phone && <p className="mt-1 text-sm text-red-500">{errors.phone}</p>}
                             </div>
                         </div>
 
                         <div>
-                            <label className="mb-2 block text-sm font-semibold text-[#ECB365]">Position / Job Title</label>
-                            <input
-                                type="text"
+                            <TextInput
+                                label="Position / Job Title"
+                                name="position"
                                 value={data.position}
                                 onChange={(e) => setData('position', e.target.value)}
-                                className="w-full rounded-md border-2 border-transparent bg-[#041C32] px-4 py-2.5 text-white placeholder-gray-500 transition focus:border-[#ECB365] focus:ring-0 focus:outline-none"
+                                error={errors.position}
                             />
-                            {errors.position && <p className="mt-1 text-sm text-red-500">{errors.position}</p>}
                         </div>
 
                         <div className="flex items-center justify-end gap-x-4 border-t border-[#064663] pt-8">
                             <Link href={route('admin.contacts.index')} className="text-sm font-semibold text-gray-400 hover:text-white">
                                 Cancel
                             </Link>
-                            <button
-                                type="submit"
-                                disabled={processing}
-                                className="hover:bg-opacity-90 rounded-md bg-[#ECB365] px-6 py-2.5 text-sm font-bold text-[#041C32] shadow-lg shadow-[#ECB365]/20 transition-all duration-300 disabled:opacity-50"
-                            >
+                            <PrimaryButton type="submit" disabled={processing}>
                                 {processing ? 'Saving Changes...' : 'Update Contact'}
-                            </button>
+                            </PrimaryButton>
                         </div>
                     </form>
                 </div>

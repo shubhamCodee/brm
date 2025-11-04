@@ -1,8 +1,10 @@
+import PrimaryButton from '@/Components/Admin/PrimaryButton';
+import SelectInput, { SelectOption } from '@/Components/Admin/SelectInput';
+import TextInput from '@/Components/Admin/TextInput';
 import AdminLayout from '@/Layouts/AdminLayout';
 import { PageProps } from '@/types';
 import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import React from 'react';
-import Select from 'react-select';
 import { route } from 'ziggy-js';
 
 interface Organization {
@@ -20,13 +22,13 @@ interface Organization {
     notes: string | null;
 }
 
-const statusOptions = [
+const statusOptions: SelectOption[] = [
     { value: 'lead', label: 'Lead' },
     { value: 'active', label: 'Active' },
     { value: 'former', label: 'Former' },
 ];
 
-const industryOptions = [
+const industryOptions: SelectOption[] = [
     { value: 'SaaS', label: 'SaaS' },
     { value: 'E-commerce', label: 'E-commerce' },
     { value: 'Healthcare', label: 'Healthcare' },
@@ -73,44 +75,8 @@ export default function Edit() {
         post(route('admin.organizations.update', organization.id));
     }
 
-    const selectStyles = {
-        control: (base: any) => ({
-            ...base,
-            backgroundColor: '#041C32',
-            borderColor: '#064663',
-            '&:hover': { borderColor: '#ECB365' },
-            boxShadow: 'none',
-        }),
-        menu: (base: any) => ({
-            ...base,
-            backgroundColor: '#04293A',
-        }),
-        option: (base: any, { isFocused, isSelected }: any) => ({
-            ...base,
-            backgroundColor: isSelected ? '#ECB365' : isFocused ? '#064663' : 'transparent',
-            color: isSelected ? '#041C32' : '#FFFFFF',
-            '&:active': { backgroundColor: '#ECB365' },
-        }),
-        multiValue: (base: any) => ({
-            ...base,
-            backgroundColor: '#064663',
-        }),
-        multiValueLabel: (base: any) => ({
-            ...base,
-            color: '#ECB365',
-        }),
-        singleValue: (base: any) => ({
-            ...base,
-            color: '#FFFFFF',
-        }),
-        input: (base: any) => ({
-            ...base,
-            color: '#FFFFFF',
-        }),
-    };
-
     const defaultStatus = statusOptions.find((o) => o.value === data.status);
-    const defaultIndustries = industryOptions.filter((o) => data.industry.includes(o.value));
+    const defaultIndustries = industryOptions.filter((o) => data.industry.includes(o.value.toString()));
 
     return (
         <>
@@ -125,126 +91,131 @@ export default function Edit() {
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-8 rounded-lg border border-[#064663]/50 bg-[#04293A] p-8 shadow-2xl">
-                        {/* The form JSX remains the same, but now it's type-safe */}
+                        {/* Basic Details Section */}
                         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                             <div className="md:col-span-2">
-                                <label className="mb-2 block text-sm font-semibold text-[#ECB365]">Organization Name</label>
-                                <input
-                                    type="text"
+                                <TextInput
+                                    label="Organization Name"
+                                    name="name"
                                     value={data.name}
                                     onChange={(e) => setData('name', e.target.value)}
-                                    className="w-full rounded-md border-2 border-transparent bg-[#041C32] px-4 py-2.5 text-white placeholder-gray-500 transition focus:border-[#ECB365] focus:ring-0 focus:outline-none"
+                                    error={errors.name}
                                 />
-                                {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name}</p>}
                             </div>
                             <div>
-                                <label className="mb-2 block text-sm font-semibold text-[#ECB365]">Email</label>
-                                <input
+                                <TextInput
+                                    label="Email"
+                                    name="email"
                                     type="email"
                                     value={data.email}
                                     onChange={(e) => setData('email', e.target.value)}
-                                    className="w-full rounded-md border-2 border-transparent bg-[#041C32] px-4 py-2.5 text-white placeholder-gray-500 transition focus:border-[#ECB365] focus:ring-0 focus:outline-none"
+                                    error={errors.email}
                                 />
-                                {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
                             </div>
                             <div>
-                                <label className="mb-2 block text-sm font-semibold text-[#ECB365]">Phone</label>
-                                <input
-                                    type="text"
+                                <TextInput
+                                    label="Phone"
+                                    name="phone"
                                     value={data.phone}
                                     onChange={(e) => setData('phone', e.target.value)}
-                                    className="w-full rounded-md border-2 border-transparent bg-[#041C32] px-4 py-2.5 text-white placeholder-gray-500 transition focus:border-[#ECB365] focus:ring-0 focus:outline-none"
+                                    error={errors.phone}
                                 />
-                                {errors.phone && <p className="mt-1 text-sm text-red-500">{errors.phone}</p>}
                             </div>
                         </div>
 
+                        {/* Location Details Section */}
                         <div className="border-t border-[#064663] pt-8">
                             <h3 className="mb-4 text-lg font-semibold text-white">Location Details</h3>
                             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                                 <div className="md:col-span-2">
-                                    <label className="mb-2 block text-sm font-semibold text-[#ECB365]">Address</label>
-                                    <input
-                                        type="text"
+                                    <TextInput
+                                        label="Address"
+                                        name="address"
                                         value={data.address}
                                         onChange={(e) => setData('address', e.target.value)}
-                                        className="w-full rounded-md border-2 border-transparent bg-[#041C32] px-4 py-2.5 text-white placeholder-gray-500 transition focus:border-[#ECB365] focus:ring-0 focus:outline-none"
+                                        error={errors.address}
                                     />
                                 </div>
                                 <div>
-                                    <label className="mb-2 block text-sm font-semibold text-[#ECB365]">City</label>
-                                    <input
-                                        type="text"
+                                    <TextInput
+                                        label="City"
+                                        name="city"
                                         value={data.city}
                                         onChange={(e) => setData('city', e.target.value)}
-                                        className="w-full rounded-md border-2 border-transparent bg-[#041C32] px-4 py-2.5 text-white placeholder-gray-500 transition focus:border-[#ECB365] focus:ring-0 focus:outline-none"
+                                        error={errors.city}
                                     />
                                 </div>
                                 <div>
-                                    <label className="mb-2 block text-sm font-semibold text-[#ECB365]">Region / State</label>
-                                    <input
-                                        type="text"
+                                    <TextInput
+                                        label="Region / State"
+                                        name="region"
                                         value={data.region}
                                         onChange={(e) => setData('region', e.target.value)}
-                                        className="w-full rounded-md border-2 border-transparent bg-[#041C32] px-4 py-2.5 text-white placeholder-gray-500 transition focus:border-[#ECB365] focus:ring-0 focus:outline-none"
+                                        error={errors.region}
                                     />
                                 </div>
                                 <div>
-                                    <label className="mb-2 block text-sm font-semibold text-[#ECB365]">Country</label>
-                                    <input
-                                        type="text"
+                                    <TextInput
+                                        label="Country"
+                                        name="country"
                                         value={data.country}
                                         onChange={(e) => setData('country', e.target.value)}
-                                        className="w-full rounded-md border-2 border-transparent bg-[#041C32] px-4 py-2.5 text-white placeholder-gray-500 transition focus:border-[#ECB365] focus:ring-0 focus:outline-none"
+                                        error={errors.country}
                                     />
                                 </div>
                                 <div>
-                                    <label className="mb-2 block text-sm font-semibold text-[#ECB365]">Postal Code</label>
-                                    <input
-                                        type="text"
+                                    <TextInput
+                                        label="Postal Code"
+                                        name="postal_code"
                                         value={data.postal_code}
                                         onChange={(e) => setData('postal_code', e.target.value)}
-                                        className="w-full rounded-md border-2 border-transparent bg-[#041C32] px-4 py-2.5 text-white placeholder-gray-500 transition focus:border-[#ECB365] focus:ring-0 focus:outline-none"
+                                        error={errors.postal_code}
                                     />
                                 </div>
                             </div>
                         </div>
 
+                        {/* Categorization Section */}
                         <div className="border-t border-[#064663] pt-8">
                             <h3 className="mb-4 text-lg font-semibold text-white">Categorization</h3>
                             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                                 <div>
-                                    <label className="mb-2 block text-sm font-semibold text-[#ECB365]">Status</label>
-                                    <Select
+                                    <SelectInput
+                                        label="Status"
+                                        name="status"
                                         options={statusOptions}
-                                        styles={selectStyles}
-                                        onChange={(option) => setData('status', option?.value || 'lead')}
                                         defaultValue={defaultStatus}
+                                        onChange={(option) => setData('status', (option as SelectOption)?.value?.toString() || '')}
+                                        error={errors.status}
                                     />
                                 </div>
                                 <div>
-                                    <label className="mb-2 block text-sm font-semibold text-[#ECB365]">Industry</label>
-                                    <Select
+                                    <SelectInput
+                                        label="Industry"
+                                        name="industry"
                                         isMulti
                                         options={industryOptions}
-                                        styles={selectStyles}
+                                        defaultValue={defaultIndustries}
+                                        value={industryOptions.filter((o) => data.industry.includes(o.value.toString()))}
                                         onChange={(options) =>
                                             setData(
                                                 'industry',
-                                                options.map((o) => o.value),
+                                                (options as SelectOption[]).map((o) => o.value.toString()),
                                             )
                                         }
-                                        defaultValue={defaultIndustries}
+                                        error={errors.industry}
                                     />
                                 </div>
                                 <div className="md:col-span-2">
-                                    <label className="mb-2 block text-sm font-semibold text-[#ECB365]">Notes</label>
-                                    <textarea
+                                    <TextInput
+                                        label="Notes"
+                                        name="notes"
+                                        as="textarea"
+                                        rows={4}
                                         value={data.notes}
                                         onChange={(e) => setData('notes', e.target.value)}
-                                        rows={4}
-                                        className="w-full rounded-md border-2 border-transparent bg-[#041C32] px-4 py-2.5 text-white placeholder-gray-500 transition focus:border-[#ECB365] focus:ring-0 focus:outline-none"
-                                    ></textarea>
+                                        error={errors.notes}
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -253,13 +224,9 @@ export default function Edit() {
                             <Link href={route('admin.organizations.index')} className="text-sm font-semibold text-gray-400 hover:text-white">
                                 Cancel
                             </Link>
-                            <button
-                                type="submit"
-                                disabled={processing}
-                                className="hover:bg-opacity-90 rounded-md bg-[#ECB365] px-6 py-2.5 text-sm font-bold text-[#041C32] shadow-lg shadow-[#ECB365]/20 transition-all duration-300 disabled:opacity-50"
-                            >
+                            <PrimaryButton type="submit" disabled={processing}>
                                 {processing ? 'Updating...' : 'Update Organization'}
-                            </button>
+                            </PrimaryButton>
                         </div>
                     </form>
                 </div>
