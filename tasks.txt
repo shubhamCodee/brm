@@ -1,15 +1,14 @@
+1) model events ing=>[before events] ed=>[after events]. (created/updated)specific (saved)general
+2) debugbar => n+1 problem
+3) failed_jobs queue:work; queue:retry <uuid>; queue:forget <uuid>; custom command
+4) redis => in memory-store; key-value data store
+5) create/edit form optimization => reusable components
+6) massUpdate and massDelete => Service(specialist)
+
 netstat -ano | findstr :5173
 taskkill /F /PID 9392
 
-centralised code 
-make one function helper function for massupdate and delete
-failed jobs
-
-redis and alternatives
-queue work v/s listen.
-Debugbar
-create/edit form optimization
-
-creating saving updating updated saved
-mode update
-updating saving updated saved
+optimization code. 
+passport
+apis
+pagination
