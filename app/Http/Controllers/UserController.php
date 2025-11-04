@@ -10,13 +10,17 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Interfaces\UserRepositoryInterface;
 use App\Jobs\NotifyUserOfProfileUpdate;
 use App\Models\User;
+use App\Services\MassActionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class UserController extends Controller
 {
-    public function __construct(private UserRepositoryInterface $userRepository) {}
+    public function __construct(
+        private UserRepositoryInterface $userRepository,
+        private MassActionService $massActionService
+    ) {}
 
     public function index()
     {
@@ -97,21 +101,14 @@ class UserController extends Controller
 
     public function massUpdate(MassUpdateUserRequest $request)
     {
-        $validated = $request->validated();
-
-        $ids = $validated['ids'];
-        $role = ['role' => $validated['role']];
-
-        $this->userRepository->massUpdate($ids, $role);
+        $this->massActionService->massUpdateUserRoles($request->validated());
 
         return redirect()->route('admin.users.index')->with('success', 'User roles updated successfully.');
     }
 
     public function massDestroy(MassDestroyUserRequest $request)
     {
-        $ids = $request->validated()['ids'];
-
-        $this->userRepository->massDestroy($ids);
+        $this->massActionService->massDeleteUsers($request->validated());
 
         return redirect()->route('admin.users.index')->with('success', 'Users deleted successfully.');
     }

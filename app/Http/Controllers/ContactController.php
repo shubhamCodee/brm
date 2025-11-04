@@ -8,12 +8,16 @@ use App\Http\Requests\UpdateContactRequest;
 use App\Interfaces\ContactRepositoryInterface;
 use App\Models\Contact;
 use App\Models\Organization;
+use App\Services\MassActionService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class ContactController extends Controller
 {
-    public function __construct(private ContactRepositoryInterface $contactRepository) {}
+    public function __construct(
+        private ContactRepositoryInterface $contactRepository,
+        private MassActionService $massActionService
+    ) {}
 
     public function index()
     {
@@ -73,9 +77,7 @@ class ContactController extends Controller
 
     public function massDestroy(MassDestroyContactRequest $request)
     {
-        $ids = $request->validated()['ids'];
-
-        $this->contactRepository->massDestroy($ids);
+        $this->massActionService->massDeleteContacts($request->validated());
 
         return redirect()->route('admin.contacts.index')->with('success', 'Contacts deleted successfully.');
     }

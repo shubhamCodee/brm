@@ -8,13 +8,17 @@ use App\Http\Requests\StoreOrganizationRequest;
 use App\Http\Requests\UpdateOrganizationRequest;
 use App\Interfaces\OrganizationRepositoryInterface;
 use App\Models\Organization;
+use App\Services\MassActionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class OrganizationController extends Controller
 {
-    public function __construct(private OrganizationRepositoryInterface $organizationRepository) {}
+    public function __construct(
+        private OrganizationRepositoryInterface $organizationRepository,
+        private MassActionService $massActionService
+    ) {}
 
     /**
      * Display a listing of the resource.
@@ -86,15 +90,15 @@ class OrganizationController extends Controller
 
     public function massUpdate(BulkUpdateOrganizationRequest $request)
     {
-        $validated = $request->validated();
-        $affected = $this->organizationRepository->massUpdate($validated["ids"], $validated["status"]);
-        return redirect()->back()->with("success", $affected . "organization(s) updated successfully");
+        $this->massActionService->massUpdateOrganizationStatus($request->validated());
+
+        return redirect()->route('admin.organizations.index')->with('success', 'Organization statuses updated successfully.');
     }
 
     public function massDestroy(BulkDestroyOrganizationRequest $request)
     {
-        $validated = $request->validated();
-        $affected = $this->organizationRepository->massDestroy($validated["ids"]);
-        return redirect()->back()->with("success", $affected . "organization(s) deleted successfully");
+        $this->massActionService->massDeleteOrganizations($request->validated());
+
+        return redirect()->route('admin.organizations.index')->with('success', 'Organizations deleted successfully.');
     }
 }
