@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 interface ContactRepositoryInterface
 {
-    public function getAllWithOrganization(): Collection;
+    public function getAllWithOrganization(bool $paginated = false, int $perPage = 10);
 
     public function findById(int $id): ?Contact;
 

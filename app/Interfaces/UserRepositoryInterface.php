@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 interface UserRepositoryInterface
 {
-    public function getAll(): Collection;
+    public function getAll(bool $paginated = false, int $perPage = 10);
 
     public function findById(int $id): ?User;
 

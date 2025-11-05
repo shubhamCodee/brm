@@ -5,13 +5,18 @@ namespace App\Repositories;
 use App\Interfaces\OrganizationRepositoryInterface;
 use App\Models\Contact;
 use App\Models\Organization;
-use Illuminate\Database\Eloquent\Collection;
 
 class EloquentOrganizationRepository implements OrganizationRepositoryInterface
 {
-    public function getAll(): Collection
+    public function getAll(bool $paginated = false, int $perPage = 10)
     {
-        return Organization::latest()->get();
+        $query = Organization::latest();
+
+        if ($paginated) {
+            return $query->paginate($perPage);
+        }
+
+        return $query->get();
     }
 
     public function findById(int $id): ?Organization

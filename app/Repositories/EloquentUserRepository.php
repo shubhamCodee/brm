@@ -9,9 +9,15 @@ use Illuminate\Support\Facades\Storage;
 
 class EloquentUserRepository implements UserRepositoryInterface
 {
-    public function getAll(): Collection
+    public function getAll(bool $paginated = false, int $perPage = 10)
     {
-        return User::latest()->get();
+        $query = User::latest();
+
+        if ($paginated) {
+            return $query->paginate($perPage);
+        }
+
+        return $query->get();
     }
 
     public function findById(int $id): ?User

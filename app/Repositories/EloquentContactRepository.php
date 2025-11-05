@@ -9,9 +9,15 @@ use Illuminate\Database\Eloquent\Collection;
 
 class EloquentContactRepository implements ContactRepositoryInterface
 {
-    public function getAllWithOrganization(): Collection
+    public function getAllWithOrganization(bool $paginated = false, int $perPage = 10)
     {
-        return Contact::with('organization')->latest()->get();
+        $query = Contact::with("organization")->latest();
+
+        if ($paginated) {
+            return $query->paginate($perPage);
+        }
+
+        return $query->get();
     }
 
     public function findById(int $id): ?Contact

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 interface OrganizationRepositoryInterface
 {
-    public function getAll(): Collection;
+    public function getAll(bool $paginated = false, int $perPage = 10);
 
     public function findById(int $id): ?Organization;
 
