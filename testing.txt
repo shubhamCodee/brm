@@ -1,0 +1,22 @@
+eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIwMTlhNGU4Ny1lNjEyLTcyMTYtYTA0Mi0xYzJhNzk2ZmMzMmYiLCJqdGkiOiI2MjZmZWUyNDAwMDI2YWIyYjA5MDllNWQwMDMxODkxM2NkOTdhMmE5YzEwMTMyZWNkODkwMmYyYzRjYjJhMThhNjRjYzU4NmY0MDgzZTQ5YiIsImlhdCI6MTc2MjI2NjAxNy45NzAwMjcsIm5iZiI6MTc2MjI2NjAxNy45NzAwMzEsImV4cCI6MTc5MzgwMjAxNy45NTM2ODgsInN1YiI6IjMxIiwic2NvcGVzIjpbXX0.SiNJlco51R52J6Isr3guBfiQvKN090KDXW6UNTAAdi4sD08v4PbnoPArGggJYhpD448SDvYL9bh9CsaLDPcPN_J2M6g3bNMad9xKll5txDWDr39KUYvvXGiB9IpXLR6YErN4rYNfw2QOVNovchC4MUjUitiVwEFas4T1TkGMbuMznRRb6_QL_uNeb3F5xRSMESJi0Kp7zf1kjj_c_IseVH2m1ikXE59_FIpKuHtaVXTeHdokKxfAlvJkArKyv8sdxScrjJ2uo7tlFD8ZUc_dQyV5knjokJac5wABABPdGXOOgNXMQwCcEEt2vW9Sh5G_VczU2wn-EQXy7iCV759pwyiWE8smmgFSdnpNxMUt5L7ASkc5yHvICSsfohiyAFXhoWYMiRb0GpNOUXLSgeG0fIPQJKRGPDPdIhJJ_KMIk8m0cjLXjpxTDzODbnEcoLU06SHyHaBpSQ2LZuQBluk9Klz84eYfLZSzRVMVrGTU9GKzINI_ZUl__nhsqnkQ3-C7NsnmDzN9V9Rrg5n6urJCGYKIUX5pIvMc3ZnT8xWe2xhrTkX-0hL0mLEbXlOOtTwPZh1vaYRC1RtSBTqPCL2YcHKHbjpapKIlrbMo-TB24rLtDY8v6AWqYxtdVupwVekkfPnhhdL34tMxPSAxkiONyyZPHvDL-qn-L9KZhjHuTp8
+
+ORGANIZATION
+1)create
+http://localhost:8000/api/organizations
+{
+    "name": "API Test Corp",
+    "email": "contact@apitest.com",
+    "phone": "555-867-5309",
+    "city": "Testville",
+    "status": "lead",
+    "industry": ["FinTech", "SaaS"]
+}
+2)update
+http://localhost:8000/api/organizations/53
+{
+    "name": "API Test Corp (Updated)",
+    "status": "active"
+}
+3)delete
+http://localhost:8000/api/organizations/53
+
