@@ -11,10 +11,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     const { auth } = usePage<PageProps>().props;
     const user = auth.user;
 
-    useEcho(`user.${user?.id}`, 'UserProfileUpdated', (event: any) => {
-        console.log('Real-time event received via useEcho:', event);
-        toast.success(event.message);
-    });
+    // useEcho(`user.${user?.id}`, 'UserProfileUpdated', (event: any) => {
+    //     console.log('Real-time event received via useEcho:', event);
+    //     toast.success(event.message);
+    // });
 
     return (
         <div className="min-h-screen bg-[#041C32]">

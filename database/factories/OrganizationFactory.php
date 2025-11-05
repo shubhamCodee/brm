@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Tenant;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -28,6 +29,7 @@ class OrganizationFactory extends Factory
             'status' => fake()->randomElement(['lead', 'active', 'former']),
             'industry' => fake()->randomElements(['SaaS', 'E-commerce', 'Healthcare', 'FinTech', 'Education'], fake()->numberBetween(1, 3)),
             'notes' => fake()->optional()->paragraph(),
+            "tenant_id" => Tenant::factory(),
         ];
     }
 }

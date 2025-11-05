@@ -22,7 +22,12 @@ export default defineConfig({
     },
     resolve: {
         alias: {
-            '@': '/resources/js', 
+            '@': '/resources/js',
+        },
+    },
+    server: {
+        watch: {
+            ignored: ['**/storage/**', '**/vendor/**', '**/.git/**', '**/node_modules/**'],
         },
     },
 });

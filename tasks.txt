@@ -1,6 +1,11 @@
-1) pagination => paginate(query builder)
-2) API controller reusing repository pattern
-3) OAuth2 server, public API, Personal Access Token, middleware[auth:api].
+1) 
 
 netstat -ano | findstr :5173
 taskkill /F /PID 9392
+
+custom artisan command
+(Cache clear)
+
+Tenant
+Scheduler
+CRON

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\BelongsToTenant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -9,7 +10,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Organization extends Model
 {
     /** @use HasFactory<\Database\Factories\OrganizationFactory> */
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, BelongsToTenant {
+        BelongsToTenant::booted as bootedTenant;
+    }
 
     protected $fillable = [
         'name',
@@ -23,6 +26,7 @@ class Organization extends Model
         'status',
         'industry',
         'notes',
+        "tenant_id",
     ];
 
     public function contacts()
@@ -32,6 +36,8 @@ class Organization extends Model
 
     protected static function booted()
     {
+        static::bootedTenant();
+
         static::deleting(function (Organization $organization) {
             $organization->contacts()->delete();
         });
