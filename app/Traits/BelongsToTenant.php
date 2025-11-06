@@ -12,8 +12,8 @@ trait BelongsToTenant
     protected static function booted(): void
     {
         static::addGlobalScope("tenant", function (Builder $builder) {
-            if (Auth::check()) {
-                $builder->where("tenant_id", Auth::user()->tenant_id);
+            if (app()->has("tenant_id")) {
+                $builder->where("tenant_id", app("tenant_id"));
             }
         });
 
@@ -22,8 +22,8 @@ trait BelongsToTenant
                 return;
             }
 
-            if (Auth::check()) {
-                $model->tenant_id = Auth::user()->tenant_id;
+            if (app()->has("tenant_id")) {
+                $model->tenant_id = app("tenant_id");
             }
         });
     }

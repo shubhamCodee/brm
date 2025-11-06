@@ -1,4 +1,9 @@
-1) 
+1) multi-tenant with single db
+2) reference to all tables
+3) custom cmd create-tenant
+4) custom trait {filteration}
+5) custom cmd {scheduler logic}
+6) cron config
 
 netstat -ano | findstr :5173
 taskkill /F /PID 9392
@@ -9,3 +14,10 @@ custom artisan command
 Tenant
 Scheduler
 CRON
+
+tenants cache clear
+mail reports to tenants admin
+custom package.
+horizon
+Testing (PHPUnit, pest), js testing tool
+

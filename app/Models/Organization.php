@@ -37,7 +37,7 @@ class Organization extends Model
     protected static function booted()
     {
         static::bootedTenant();
-
+        
         static::deleting(function (Organization $organization) {
             $organization->contacts()->delete();
         });
