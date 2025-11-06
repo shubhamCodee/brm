@@ -2,10 +2,12 @@
 
 namespace App\Console\Commands;
 
+use App\Mail\DailyReportMail;
 use App\Models\Tenant;
 use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class SendDailyReports extends Command
 {
@@ -28,7 +30,7 @@ class SendDailyReports extends Command
      */
     public function handle()
     {
-        $this->info("Starting to generate daily reports...");
+        $this->info("Starting to generate and send daily reports...");
 
         $tenantId = $this->option("tenant");
 
@@ -46,13 +48,18 @@ class SendDailyReports extends Command
         $tenants->each(function (Tenant $tenant) {
             $this->line("Processing report for tenant: {$tenant->name} (ID: {$tenant->id})");
 
-            app()->instance("tenant_id", $tenant->id);
+            $adminUser = User::where("tenant_id", $tenant->id)->where("role", "admin")->first();
 
-            $newUsersCount = User::whereDate("created_at", today())->count();
+            if (! $adminUser) {
+                $this->warn("-> No admin user found for tenant {$tenant->name}. Skipping.");
+                return;
+            }
 
-            Log::info("Daily Report for Tenant #{$tenant->id} ({$tenant->name}): {$newUsersCount} new users created today.");
+            $newUsersCount = User::where("tenant_id", $tenant->id)->whereDate("created_at", today())->count();
 
-            $this->info(" -> Found {$newUsersCount} new users today.");
+            Mail::to($adminUser)->queue(new DailyReportMail($tenant, $newUsersCount));
+
+            $this->info(" -> Report sent to {$adminUser->email}. Found {$newUsersCount} new users today.");
         });
 
         $this->info("Daily reports generated successfully");
