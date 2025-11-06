@@ -5,18 +5,29 @@ namespace App\Repositories;
 use App\Interfaces\OrganizationRepositoryInterface;
 use App\Models\Contact;
 use App\Models\Organization;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class EloquentOrganizationRepository implements OrganizationRepositoryInterface
 {
     public function getAll(bool $paginated = false, int $perPage = 10)
     {
-        $query = Organization::latest();
+        $tenantId = Auth::user()->tenant_id;
+        $tags = ['organizations', 'tenant:' . $tenantId];
+        $key = 'organizations.tenant.' . $tenantId;
 
-        if ($paginated) {
-            return $query->paginate($perPage);
-        }
+        return Cache::tags($tags)->remember($key, now()->addMinutes(60), function () use ($paginated, $perPage, $tenantId) {
+            Log::info("=== DATABASE HIT: Fetching organizations for Tenant ID: {$tenantId} ===");
 
-        return $query->get();
+            $query = Organization::latest();
+
+            if ($paginated) {
+                return $query->paginate($perPage);
+            }
+
+            return $query->get();
+        });
     }
 
     public function findById(int $id): ?Organization
