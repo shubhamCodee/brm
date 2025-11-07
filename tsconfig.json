@@ -113,5 +113,14 @@
         },
         "jsx": "react-jsx"
     },
-    "include": ["resources/js/**/*.ts", "resources/js/**/*.d.ts", "resources/js/**/*.tsx", "resources/js/type.d.ts"]
+    "include": [
+        "resources/js/**/*.ts",
+        "resources/js/**/*.d.ts",
+        "resources/js/**/*.tsx",
+        "resources/js/type.d.ts",
+        "resources/js/**/*.test.ts",
+        "resources/js/**/*.test.tsx",
+        "vitest.config.ts",
+        "resources/js/setupTests.ts"
+    ]
 }
