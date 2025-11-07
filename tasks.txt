@@ -1,10 +1,3 @@
-1) multi-tenant with single db
-2) reference to all tables
-3) custom cmd create-tenant
-4) custom trait {filteration}
-5) custom cmd {scheduler logic}
-6) cron config
-
 netstat -ano | findstr :5173
 taskkill /F /PID 9392
 

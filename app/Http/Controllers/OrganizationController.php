@@ -8,10 +8,10 @@ use App\Http\Requests\StoreOrganizationRequest;
 use App\Http\Requests\UpdateOrganizationRequest;
 use App\Interfaces\OrganizationRepositoryInterface;
 use App\Models\Organization;
-use App\Services\MassActionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
+use Shubham\MassActionService\MassActionService;
 
 class OrganizationController extends Controller
 {

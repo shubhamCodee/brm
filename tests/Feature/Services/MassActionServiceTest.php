@@ -2,8 +2,8 @@
 
 use App\Models\Tenant;
 use App\Models\User;
-use App\Services\MassActionService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Shubham\MassActionService\MassActionService;
 
 uses(RefreshDatabase::class);
 

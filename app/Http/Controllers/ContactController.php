@@ -8,9 +8,9 @@ use App\Http\Requests\UpdateContactRequest;
 use App\Interfaces\ContactRepositoryInterface;
 use App\Models\Contact;
 use App\Models\Organization;
-use App\Services\MassActionService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Shubham\MassActionService\MassActionService;
 
 class ContactController extends Controller
 {

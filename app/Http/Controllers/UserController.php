@@ -10,10 +10,10 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Interfaces\UserRepositoryInterface;
 use App\Jobs\NotifyUserOfProfileUpdate;
 use App\Models\User;
-use App\Services\MassActionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
+use Shubham\MassActionService\MassActionService;
 
 class UserController extends Controller
 {

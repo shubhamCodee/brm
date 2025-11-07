@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8476d7c2e8d4b1f20fb6c593b4943f07",
+    "content-hash": "4f25ea16b488c1b2055e2f525fea6aea",
     "packages": [
         {
             "name": "brick/math",
@@ -4676,6 +4676,45 @@
                 "source": "https://github.com/ramsey/uuid/tree/4.9.1"
             },
             "time": "2025-09-04T20:59:21+00:00"
+        },
+        {
+            "name": "shubham/mass-action-service",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "../packages/mass-action-service",
+                "reference": "8b505ee5823ab77e9bf15957218f7454cbe5f92b"
+            },
+            "require": {
+                "illuminate/support": "^11.0|^12.0",
+                "php": "^8.2"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Shubham\\MassActionService\\Providers\\MassActionServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Shubham\\MassActionService\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Shubham Mohapatra",
+                    "email": "your-email@example.com"
+                }
+            ],
+            "description": "A simple Laravel service for performing mass update and delete actions.",
+            "transport-options": {
+                "relative": true
+            }
         },
         {
             "name": "symfony/clock",
@@ -10996,7 +11035,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": {
+        "shubham/mass-action-service": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
