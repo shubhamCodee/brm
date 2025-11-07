@@ -19,10 +19,8 @@ describe('<PrimaryButton />', () => {
     it('applies additional classNames', () => {
         const customClass = 'my-custom-class';
 
-        // Arrange: Render the button with an extra className.
         render(<PrimaryButton className={customClass}>Custom Style</PrimaryButton>);
 
-        // Act & Assert: Find the button and check if it has the new class.
         const button = screen.getByRole('button', { name: /custom style/i });
         expect(button).toHaveClass(customClass);
     });
