@@ -10,8 +10,8 @@
     "license": "MIT",
     "repositories": [
         {
-            "type": "path",
-            "url": "../packages/mass-action-service"
+            "type": "vcs",
+            "url": "https://github.com/shubhamCodee/mass-action-service.git"
         }
     ],
     "require": {
@@ -24,7 +24,7 @@
         "laravel/wayfinder": "^0.1.11",
         "predis/predis": "^3.2",
         "pusher/pusher-php-server": "^7.2",
-        "shubham/mass-action-service": "dev-main",
+        "shubham/mass-action-service": "^1.0",
         "tightenco/ziggy": "^2.6"
     },
     "require-dev": {

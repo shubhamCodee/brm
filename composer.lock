@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4f25ea16b488c1b2055e2f525fea6aea",
+    "content-hash": "87fb40e8fc39693bd35d5fe7ae9f82de",
     "packages": [
         {
             "name": "brick/math",
@@ -4679,11 +4679,17 @@
         },
         {
             "name": "shubham/mass-action-service",
-            "version": "dev-main",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/shubhamCodee/mass-action-service.git",
+                "reference": "a96f9bdb50c9f94ddc3ba31f96e366c63caa30ae"
+            },
             "dist": {
-                "type": "path",
-                "url": "../packages/mass-action-service",
-                "reference": "8b505ee5823ab77e9bf15957218f7454cbe5f92b"
+                "type": "zip",
+                "url": "https://api.github.com/repos/shubhamCodee/mass-action-service/zipball/a96f9bdb50c9f94ddc3ba31f96e366c63caa30ae",
+                "reference": "a96f9bdb50c9f94ddc3ba31f96e366c63caa30ae",
+                "shasum": ""
             },
             "require": {
                 "illuminate/support": "^11.0|^12.0",
@@ -4708,13 +4714,15 @@
             "authors": [
                 {
                     "name": "Shubham Mohapatra",
-                    "email": "your-email@example.com"
+                    "email": "shubham@gmail.com"
                 }
             ],
             "description": "A simple Laravel service for performing mass update and delete actions.",
-            "transport-options": {
-                "relative": true
-            }
+            "support": {
+                "source": "https://github.com/shubhamCodee/mass-action-service/tree/v1.0.0",
+                "issues": "https://github.com/shubhamCodee/mass-action-service/issues"
+            },
+            "time": "2025-11-08T06:42:05+00:00"
         },
         {
             "name": "symfony/clock",
@@ -11035,9 +11043,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "shubham/mass-action-service": 20
-    },
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
