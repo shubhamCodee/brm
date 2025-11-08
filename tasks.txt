@@ -1,16 +1,11 @@
+1) email (mailtrap)
+2) queue[redis] monitoring (horizon)
+3) clear cache[redis] cmd
+4) pest:be vitest:fe
+5) custom package{action}
+
 netstat -ano | findstr :5173
 taskkill /F /PID 9392
 
-custom artisan command
-(Cache clear)
 
-Tenant
-Scheduler
-CRON
-
-tenants cache clear
-mail reports to tenants admin
-custom package.
-horizon
-Testing (PHPUnit, pest), js testing tool
-
+docker
