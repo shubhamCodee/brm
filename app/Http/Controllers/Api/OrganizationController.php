@@ -29,7 +29,13 @@ class OrganizationController extends Controller
      */
     public function store(StoreOrganizationRequest $request)
     {
-        $organization = $this->organizationRepository->create($request->validated());
+        $validatedData = $request->validated();
+
+        $validatedData['tenant_id'] = auth()->user()->tenant_id;
+
+        $organization = $this->organizationRepository->create($validatedData);
+
+        // $organization = $this->organizationRepository->create($request->validated());
 
         return response()->json($organization, 201);
     }

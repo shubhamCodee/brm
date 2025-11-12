@@ -38,8 +38,14 @@ class UserController extends Controller
     {
         $validatedData = $request->validated();
 
+        $tenantId = auth()->user()->tenant_id;
+
+        $validatedData["tenant_id"] = $tenantId;
+
         if ($request->hasFile("profile_picture")) {
-            $path = $request->file("profile_picture")->store("profile_pictures", "public");
+            $directory = "tenants/$tenantId/profile_pictures";
+
+            $path = $request->file("profile_picture")->store($directory, "public");
             $validatedData["profile_picture"] = $path;
         }
 
@@ -63,12 +69,18 @@ class UserController extends Controller
             unset($validatedData["password"]);
         }
 
+        $tenantId = $user->tenant_id;
+
+        $validatedData["tenant_id"] = $tenantId;
+
         if ($request->hasFile("profile_picture")) {
+            $directory = "tenants/$tenantId/profile_pictures";
+
             if ($user->profile_picture) {
                 Storage::disk("public")->delete($user->profile_picture);
             }
 
-            $path = $request->file("profile_picture")->store("profile_pictures", "public");
+            $path = $request->file("profile_picture")->store($directory, "public");
             $validatedData["profile_picture"] = $path;
         }
 

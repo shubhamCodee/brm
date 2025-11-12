@@ -1,11 +1,18 @@
-1) email (mailtrap)
-2) queue[redis] monitoring (horizon)
-3) clear cache[redis] cmd
-4) pest:be vitest:fe
-5) custom package{action}
+OOPS revision
+passport {third-party auth} / sanctum {first-party auth}
+v10 providers {config/app.php []providers}
+job parameters {doubt: no default fnx}
+redis throttle: rate limiting
+cURL {like: api client} (cmd)
+multi-tenant file storage
 
-netstat -ano | findstr :5173
-taskkill /F /PID 9392
+curl -X POST "http://127.0.0.1:8000/api/organizations" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIwMTlhNzIzNC1iMTZjLTcyNTQtYjIwMy0zMWI0MTNlZDE2ZDIiLCJqdGkiOiJmMWQ2OGU3YWFmM2EyNmE2ZTY5YzkxNjliZWRiMDU5YjZkMmFhOTdiNjA1MGI1NGIxNmJhOThjYTM2MTc5MzY5YmVjNGEzOWMxMmNhOGI0MCIsImlhdCI6MTc2Mjg1MjY2OC4zMjQ1OTUsIm5iZiI6MTc2Mjg1MjY2OC4zMjQ1OTksImV4cCI6MTc5NDM4ODY2OC4zMTU5NDYsInN1YiI6IjEiLCJzY29wZXMiOltdfQ.CCffb48PtAQvbqivDGxiWCF7rkdicG__SlCL3CweLt6BD6pk9V35fn9rdYcQ0d2OLIDnMmJH4KpCIMNeYJ1eqYTMqVaXsXccTXCiChe6SXximll0MVC19PrMorJ31-iyWTzC0bkX6YVCc5pB0PLjVYK-GlquHVL9tjeHI84OqAVbhenbC5k8ln3cwE5jy-wJ4cN4pUgPxGDxBhYOSvNqnkCqugf6jyI6er7ReOFyHMXVyVm_AxETlkN-x0um2eJUpX-dV_hHAHuovhvnooIhCL3DCSKh1VvxuizaEYFaxqlApU3X5UtaB-tAovVVhWE1DwzAFT69rFDRfXtFUP2mzvpf_PtEFhnVBXsHr0b58tFuFLiyVBI6MZKNSwKBlB-14eGWrjUl5dI_-XwFTTsJyYq_58HldtMGYJeep1q2ZOjtINCYBFzs-xj-f1hDty2A6E4_1EQbrioQEwcRvD_sejcK-Ar07SeB9n7yjNcTdBXW9mlbomTfWZNK5TG3uxAZ_f6aSMG3yTrw_Bv3TWmYEZolU7PTtam_gYX6RR-HUb8XRbmk9RP8AtvExP4jo-CbOgHnlxCOJKXVpypgz8NwDYzw4pNRzSBWML65XnA5jY8ZhqLyl1sc9PzQ6HnK_UQsglb2-7Xsq7Gz0b_7ZsHxVYn-gUROANUQ0gwApGkyq2U" \
+-d '{"name": "Redis Test Inc.", "status": "active", "tenant_id": 1}' | jq
 
 
-docker
+functions job
+work listen 
+horizon (variables meaning, tries priority?)

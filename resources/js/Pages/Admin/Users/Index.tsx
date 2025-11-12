@@ -119,15 +119,9 @@ export default function Index() {
     const columns: TableColumn<User>[] = [
         {
             name: 'Avatar',
-            cell: (row: User) => (
+            cell: (row) => (
                 <div className="py-2">
-                    {row.profile_picture ? (
-                        <img className="h-10 w-10 rounded-full object-cover" src={`/storage/${row.profile_picture}`} alt={row.name} />
-                    ) : (
-                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#064663] font-bold text-[#ECB365]">
-                            <span>{getInitials(row.name)}</span>
-                        </div>
-                    )}
+                    <img className="h-10 w-10 rounded-full object-cover" src={row.profile_picture_url} alt={row.name} />
                 </div>
             ),
             width: '100px',

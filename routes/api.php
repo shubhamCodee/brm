@@ -7,7 +7,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware("auth:api")->group(function () {
-    Route::apiResource("organizations", OrganizationController::class);
+    Route::post("organizations", [OrganizationController::class, "store"])
+        ->middleware("throttle:create-limit");
+
+    Route::apiResource("organizations", OrganizationController::class)->except(["store"]);
     Route::apiResource('contacts', ContactController::class);
     Route::apiResource("users", UserController::class);
 });

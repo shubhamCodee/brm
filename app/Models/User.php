@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Passport\Contracts\OAuthenticatable;
 use Laravel\Passport\HasApiTokens;
 
@@ -43,6 +44,10 @@ class User extends Authenticatable implements OAuthenticatable
         'remember_token',
     ];
 
+    protected $appends = [
+        "profile_picture_url"
+    ];
+
     /**
      * Get the attributes that should be cast.
      *
@@ -54,5 +59,14 @@ class User extends Authenticatable implements OAuthenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function getProfilePictureUrlAttribute(): string {
+        if ($this->profile_picture) {
+            return Storage::disk("public")->url($this->profile_picture);
+        } 
+
+        return "/images/default_avatar.png";
+        
     }
 }
