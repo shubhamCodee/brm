@@ -7,6 +7,7 @@ BRM is a powerful, modern Customer Relationship Management (CRM) application bui
 This project was built with a focus on clean, scalable, and maintainable code, adhering to modern best practices.
 
 -   **Multi-Tenancy:** The application is built on a single-database, multi-tenant architecture. All data is automatically and securely scoped to the authenticated user's tenant, making it suitable for a SaaS (Software as a Service) environment.
+-   **Tenant-Scoped File Storage:** Enhances multi-tenancy by physically isolating tenant-specific file uploads into separate directories on the disk, ensuring strict data separation.
 -   **Repository Pattern:** The data layer is fully decoupled from the controllers through the use of the Repository Pattern. This promotes a clean separation of concerns and makes the application easy to test and maintain.
 -   **Service-Oriented:** Complex business logic, such as mass actions and tenant provisioning, is encapsulated in dedicated Service Classes, keeping controllers lightweight and focused on handling HTTP requests.
 -   **API First:** The application includes a secure, stateless API built with Laravel Passport, enabling third-party integrations and headless operations.
@@ -15,10 +16,11 @@ This project was built with a focus on clean, scalable, and maintainable code, a
 ## Core Features
 
 -   **Full CRUD Functionality:** Complete Create, Read, Update, and Delete capabilities for key CRM resources: Users, Organizations, and Contacts.
+-   **Tenant-Scoped File Storage:** All user-uploaded files, such as profile pictures, are automatically stored in tenant-specific directories. The `User` model features a custom accessor to centralize URL generation logic, providing a full, correct URL and a default avatar image seamlessly to the frontend.
 -   **Real-Time Notifications:** A real-time notification system built with Pusher and Laravel Echo. Events are dispatched to a queue and broadcast to the frontend, providing instant user feedback.
 -   **Mass Update & Mass Delete:** Efficiently perform bulk actions on multiple records at once through a clean, modal-driven UI. The core logic is now provided by a reusable, external package.
--   **Secure API with Laravel Passport:** A comprehensive set of API endpoints for all resources, protected by OAuth2 authentication. The API supports pagination and follows RESTful conventions.
--   **Advanced Queue Management & Monitoring:** *(**ENHANCED**)* Utilizes Laravel's Redis-powered queue system for background jobs. Includes robust handling for failed jobs and features a **Laravel Horizon** dashboard for professional, real-time monitoring of queue throughput, job status, and failures.
+-   **Secure API with Laravel Passport:** A comprehensive set of API endpoints for all resources, protected by OAuth2 authentication. The API supports pagination, follows RESTful conventions, and includes advanced, Redis-powered **rate limiting** with custom rules to protect against abuse on resource-intensive endpoints.
+-   **Advanced Queue Management & Monitoring:** Utilizes Laravel's Redis-powered queue system for background jobs. Includes robust handling for failed jobs with **automatic retry and backoff strategies**, and features a **Laravel Horizon** dashboard for professional, real-time monitoring of queue throughput, job status, and failures.
 -   **Automated Scheduled Tasks:** A tenant-aware command for generating daily reports is managed by Laravel's Scheduler and a server-side Cron job.
 -   **Automated Email Reporting:** The scheduled task automatically generates and sends daily summary reports to each tenant's administrator using Laravel's Mailable and queue system.
 -   **Performance Caching:** Implements a tenant-aware caching strategy using Redis and Cache Tags to dramatically improve performance by caching slow database queries. Includes a custom Artisan command for surgically clearing the cache for a specific tenant.
@@ -77,6 +79,7 @@ This project was built with a focus on clean, scalable, and maintainable code, a
     ```
 
 4.  **Configure `.env` file:**
+    -   Set `APP_URL=http://127.0.0.1:8000`.
     -   Set up your `DB_DATABASE`, `DB_USERNAME`, and `DB_PASSWORD` credentials.
     -   Configure your `PUSHER_APP_ID`, `PUSHER_APP_KEY`, etc.
     -   Ensure `SESSION_DRIVER` is set to `redis`.
@@ -88,9 +91,10 @@ This project was built with a focus on clean, scalable, and maintainable code, a
     php artisan migrate:fresh --seed
     ```
 
-6.  **Set up Laravel Passport:**
+6.  **Set up Laravel Passport & Storage Link:**
     ```bash
     php artisan passport:install
+    php artisan storage:link
     ```
 
 7.  **Run the development servers:**
