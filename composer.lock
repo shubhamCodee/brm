@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "87fb40e8fc39693bd35d5fe7ae9f82de",
+    "content-hash": "8f699ed2c0d56de4845d6df56edccb3d",
     "packages": [
         {
             "name": "brick/math",
@@ -4679,17 +4679,11 @@
         },
         {
             "name": "shubham/mass-action-service",
-            "version": "v1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/shubhamCodee/mass-action-service.git",
-                "reference": "a96f9bdb50c9f94ddc3ba31f96e366c63caa30ae"
-            },
+            "version": "dev-main",
             "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/shubhamCodee/mass-action-service/zipball/a96f9bdb50c9f94ddc3ba31f96e366c63caa30ae",
-                "reference": "a96f9bdb50c9f94ddc3ba31f96e366c63caa30ae",
-                "shasum": ""
+                "type": "path",
+                "url": "../packages/mass-action-service",
+                "reference": "a96f9bdb50c9f94ddc3ba31f96e366c63caa30ae"
             },
             "require": {
                 "illuminate/support": "^11.0|^12.0",
@@ -4718,11 +4712,9 @@
                 }
             ],
             "description": "A simple Laravel service for performing mass update and delete actions.",
-            "support": {
-                "source": "https://github.com/shubhamCodee/mass-action-service/tree/v1.0.0",
-                "issues": "https://github.com/shubhamCodee/mass-action-service/issues"
-            },
-            "time": "2025-11-08T06:42:05+00:00"
+            "transport-options": {
+                "relative": true
+            }
         },
         {
             "name": "symfony/clock",
@@ -11043,7 +11035,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": {
+        "shubham/mass-action-service": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

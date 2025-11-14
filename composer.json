@@ -10,8 +10,8 @@
     "license": "MIT",
     "repositories": [
         {
-            "type": "vcs",
-            "url": "https://github.com/shubhamCodee/mass-action-service.git"
+            "type": "path",
+            "url": "../packages/*"
         }
     ],
     "require": {
@@ -24,7 +24,7 @@
         "laravel/wayfinder": "^0.1.11",
         "predis/predis": "^3.2",
         "pusher/pusher-php-server": "^7.2",
-        "shubham/mass-action-service": "^1.0",
+        "shubham/mass-action-service": "@dev",
         "tightenco/ziggy": "^2.6"
     },
     "require-dev": {
@@ -43,7 +43,10 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

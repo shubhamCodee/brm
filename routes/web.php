@@ -10,17 +10,20 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
+    if ($redirect = redirectToDashboard()) return $redirect;
     return Inertia::render('Guest/Home');
 })->name('home');
 
 // auth routes
 Route::get("/register", function () {
+    if ($redirect = redirectToDashboard()) return $redirect;
     return Inertia::render("Auth/Register");
 });
 
 Route::post("/register", [AuthController::class, "register"])->name("register");
 
 Route::get("/login", function () {
+    if ($redirect = redirectToDashboard()) return $redirect;
     return Inertia::render("Auth/Login");
 });
 
