@@ -3,7 +3,6 @@
 use App\Models\Tenant;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Shubham\MassActionService\MassActionService;
 
 uses(RefreshDatabase::class);
 
@@ -19,13 +18,9 @@ test('correctly mass soft-deletes users', function () {
         "tenant_id" => $tenant->id,
     ]);
 
-    $massActionService = app(MassActionService::class);
+    $validatedData = $usersToDelete->pluck("id")->toArray();
 
-    $validatedData = [
-        "ids" => $usersToDelete->pluck("id")->toArray(),
-    ];
-
-    $massActionService->massDeleteUsers($validatedData);
+    User::massDelete($validatedData);
 
     foreach($usersToDelete as $user){
         $this->assertSoftDeleted("users", [
