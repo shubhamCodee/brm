@@ -222,8 +222,20 @@ return [
         ],
 
         'local' => [
-            'supervisor-1' => [
-                'maxProcesses' => 3,
+            'supervisor-main' => [
+                'connection' => 'redis',
+                'queue' => ['high', 'default'],
+                'balance' => 'auto',
+                'minProcesses' => 1,
+                'maxProcesses' => 3, 
+                'tries' => 1,
+            ],
+            'supervisor-low-priority' => [
+                'connection' => 'redis',
+                'queue' => ['low'],
+                'balance' => 'simple',
+                'maxProcesses' => 1,
+                'tries' => 1,
             ],
         ],
     ],
