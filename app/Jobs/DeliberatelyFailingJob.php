@@ -9,6 +9,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
+use App\Jobs\Middleware\LogJobLifecycle;
 
 class DeliberatelyFailingJob implements ShouldQueue
 {
@@ -26,6 +27,11 @@ class DeliberatelyFailingJob implements ShouldQueue
         //
     }
 
+    public function middleware(): array
+    {
+        return [new LogJobLifecycle];
+    }
+
     /**
      * Execute the job.
      */
@@ -34,5 +40,10 @@ class DeliberatelyFailingJob implements ShouldQueue
         Log::info("the deliberatelyFailingJob has started...");
 
         throw new Exception("DeliberatelyFailingJob");
+    }
+
+    public function failed(): void
+    {
+        Log::error('no more tries');
     }
 }
